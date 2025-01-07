@@ -2,6 +2,7 @@ package entity;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -15,10 +16,22 @@ public class Player extends Entity {
 	GamePanel gp;
 	KeyHandler keyH;
 	
+	public final int screenX;
+	public final int screenY;
+	
 	public Player(GamePanel gp, KeyHandler keyH) {
 		
 		this.gp = gp;
 		this.keyH = keyH;
+		
+		screenX = gp.screenWidth/2 - (gp.tileSize/2);
+		screenY = gp.screenHeight/2 - (gp.tileSize/2);
+		
+		solidArea = new Rectangle();
+		solidArea.x = 35;
+		solidArea.y = 70;
+		solidArea.width = 10;
+		solidArea.height = 10;
 		
 		setDefaultValues();
 		getPlayerImage();
@@ -26,8 +39,8 @@ public class Player extends Entity {
 	}
 	public void setDefaultValues() {
 		
-		x = 100;
-		y = 100;
+		worldX = gp.tileSize * 14;
+		worldY = gp.tileSize * 14;
 		speed = 4;
 		direction = "down";
 	}
@@ -60,43 +73,57 @@ public class Player extends Entity {
 				keyH.rightPressed == true ||keyH.leftPressed == true) {
 			if(keyH.upPressed == true) {
 				direction = "up";
-				y -= speed;
 			}
 			else if(keyH.downPressed == true) {
 				direction = "down";
-				y += speed;
 			}
 			else if(keyH.rightPressed == true) {
-				direction = "right";
-				x += speed;
+				direction = "right";				
 			}
 			else if(keyH.leftPressed == true) {
-				direction = "left";
-				x -= speed;
+				direction = "left";				
 			}
 			
+			//COLLISION CHECKER
+			
+			collisionOn = false;
+			gp.cChecker.checkTile(this);
+			
+			// IF FALSE, PLAYER MOVES
+			if(collisionOn == false) {
+				
+				switch(direction) {
+				case "up":
+					worldY -= speed;
+					break;
+				case "down":
+					worldY += speed;
+					break;
+				case "left":
+					worldX -= speed;
+					break;
+				case "right":
+					worldX += speed;
+					break;
+					}
+			}
 			spriteCounter++;
 			if (spriteCounter > 10) {
 				if(spriteNum == 1) {
 					spriteNum = 2;
-					System.out.println(spriteNum);
 				}
 				else if(spriteNum == 2) {
 					spriteNum = 3;
-					System.out.println(spriteNum);
 				}
 				else if(spriteNum == 3) {
 					spriteNum = 4;
-					System.out.println(spriteNum);
 				}
 				else if(spriteNum == 4) {
 					spriteNum = 1;
-					System.out.println(spriteNum);
 				}
 				spriteCounter = 0;
 			}
 		}
-		
 		
 	}
 	public void draw(Graphics2D g2) {
@@ -164,7 +191,7 @@ public class Player extends Entity {
 			}
 			break;
 		}
-		g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+		g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 		
 	}
 }
