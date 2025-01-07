@@ -6,6 +6,9 @@ to overcome those challenges.
 
 The end goal is to have a fully functional and lightweight game.
 
+# Requirements
+Java 23
+
 # License
 Distributed under the GNU General Public License v3.0.
 
