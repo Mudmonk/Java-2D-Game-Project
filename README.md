@@ -14,3 +14,7 @@ Distributed under the GNU General Public License v3.0.
 
 # Contact
 Project Link: https://github.com/Mudmonk/Java-2D-Game-Project
+
+# Music
+Music composed by Bert Cole
+bitbybitsound.com
